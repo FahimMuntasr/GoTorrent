@@ -1,0 +1,11 @@
+# Build output
+GoTorrent
+
+# OS/editor files
+.DS_Store
+.idea/
+.vscode/
+
+# Torrent/download files
+*.torrent
+downloads/
