@@ -1,7 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/FahimMuntasr/GoTorrent/bencode"
+)
 
 func main() {
-    fmt.Println("BitTorrent client")
+	decoder := bencode.NewDecoder([]byte("i42e"))
+
+	fmt.Println(decoder)
 }
