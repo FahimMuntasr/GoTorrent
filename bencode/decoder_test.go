@@ -1,6 +1,9 @@
 package bencode
 
-import "testing"
+import (
+    "reflect"
+    "testing"
+)
 
 func TestDecodeInteger(t *testing.T) {
 	decoder := NewDecoder([]byte("i-42e"))
@@ -375,15 +378,44 @@ func TestDecode(t *testing.T) {
                 t.Fatal(err)
             }
 
-            // We'll improve this comparison shortly.
-            _ = got
+            if !reflect.DeepEqual(got, tt.want) {
+                t.Errorf("expected %v, got %v", tt.want, got)
+            }
         })
     }
 }
 
+func TestDecodeInvalidType(t *testing.T) {
+    decoder := NewDecoder([]byte("x42"))
 
+    _, err := decoder.Decode()
 
+    if err == nil {
+        t.Fatal("expected error for invalid bencode type")
+    }
+}
 
+func TestDecodeNested(t *testing.T) {
+  data := "d4:infod4:name4:test6:lengthi42eee"
+
+  decoder := NewDecoder([]byte(data))
+
+  got, err := decoder.Decode()
+  if err != nil {
+      t.Fatal(err)
+  }
+
+  want := map[string]any{
+      "info": map[string]any{
+          "name":   "test",
+           "length": int64(42),
+      },
+  }
+
+  if !reflect.DeepEqual(got, want) {
+      t.Errorf("expected %v, got %v", want, got)
+  }
+}
 
 
 

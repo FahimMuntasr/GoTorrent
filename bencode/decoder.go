@@ -194,6 +194,10 @@ func (d *Decoder) Decode() (any, error) {
         return d.decodeDictionary()
 
     default:
-        return d.decodeString()
+        if d.data[d.pos] >= '0' && d.data[d.pos] <= '9' {
+            return d.decodeString()
+        }
+
+        return nil, fmt.Errorf("invalid bencode type")
     }
 }
